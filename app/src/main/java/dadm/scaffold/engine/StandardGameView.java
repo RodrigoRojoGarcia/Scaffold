@@ -7,37 +7,24 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import dadm.scaffold.space.Projectile;
-import dadm.scaffold.space.SpaceShipPlayer;
-import dadm.scaffold.space.Spaceship;
 
 public class StandardGameView extends View implements GameView {
 
-
-    private Map<Integer, Projectile> projectiles;
-    private Map<Integer, Spaceship> spaceships;
-    private SpaceShipPlayer player;
-
+    private List<GameObject> gameObjects;
 
     public StandardGameView(Context context) {
         super(context);
-        this.projectiles = new ConcurrentHashMap<>();
-        this.spaceships = new ConcurrentHashMap<>();
+        this.gameObjects = new ArrayList<GameObject>();
     }
 
     public StandardGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.projectiles = new ConcurrentHashMap<>();
-        this.spaceships = new ConcurrentHashMap<>();
+        this.gameObjects = new ArrayList<GameObject>();
     }
 
     public StandardGameView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.projectiles = new ConcurrentHashMap<>();
-        this.spaceships = new ConcurrentHashMap<>();
+        this.gameObjects = new ArrayList<GameObject>();
     }
 
     @Override
@@ -48,20 +35,15 @@ public class StandardGameView extends View implements GameView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        synchronized (projectiles) {
-            for(Projectile proj : projectiles.values()){
-                proj.onDraw(canvas);
+        synchronized (gameObjects) {
+            int numObjects = gameObjects.size();
+            for (int i = 0; i < numObjects; i++) {
+                gameObjects.get(i).onDraw(canvas);
             }
         }
-        synchronized (spaceships){
-            for(Spaceship sp : spaceships.values()){
-                sp.onDraw(canvas);
-            }
-        }
-        player.onDraw(canvas);
     }
 
-    public void setProjectiles(Map<Integer, Projectile> projectiles){this.projectiles = projectiles;}
-    public void setSpaceships(Map<Integer, Spaceship> spaceships){this.spaceships = spaceships;}
-    public void setPlayer(SpaceShipPlayer player){this.player = player;}
+    public void setGameObjects(List<GameObject> gameObjects) {
+        this.gameObjects = gameObjects;
+    }
 }

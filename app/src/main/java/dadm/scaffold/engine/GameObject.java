@@ -6,7 +6,7 @@ public abstract class GameObject {
 
     public abstract void startGame();
 
-    public abstract void onUpdate(long elapsedMillis);
+    public abstract void onUpdate(long elapsedMillis, GameEngine gameEngine);
 
     public abstract void onDraw(Canvas canvas);
 

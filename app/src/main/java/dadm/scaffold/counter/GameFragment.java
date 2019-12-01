@@ -20,7 +20,7 @@ import dadm.scaffold.space.SpaceShipPlayer;
 
 
 public class GameFragment extends BaseFragment implements View.OnClickListener {
-
+    private GameEngine theGameEngine;
 
     public GameFragment() {
     }
@@ -44,11 +44,11 @@ public class GameFragment extends BaseFragment implements View.OnClickListener {
                 //se elimina el listener en cuanto es llamado
                 observer.removeOnGlobalLayoutListener(this);
                 GameView gameView = (GameView) getView().findViewById(R.id.gameView);
-                GameEngine.Instance.setActivity(getActivity());
-                GameEngine.Instance.setGameView(gameView);
-                GameEngine.Instance.setTheInputController(new JoystickInputController(getView()));
-                //theGameEngine.addGameObject(new SpaceShipPlayer(theGameEngine));
-                GameEngine.Instance.startGame();
+                theGameEngine = new GameEngine(getActivity(), gameView);
+                theGameEngine.setTheInputController(new JoystickInputController(getView()));
+                theGameEngine.addGameObject(new SpaceShipPlayer(theGameEngine));
+                theGameEngine.addGameObject(new FramesPerSecondCounter(theGameEngine));
+                theGameEngine.startGame();
             }
         });
 
@@ -65,7 +65,7 @@ public class GameFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-        if (GameEngine.Instance.isRunning()){
+        if (theGameEngine.isRunning()){
             pauseGameAndShowPauseDialog();
         }
     }
@@ -73,12 +73,12 @@ public class GameFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        GameEngine.Instance.stopGame();
+        theGameEngine.stopGame();
     }
 
     @Override
     public boolean onBackPressed() {
-        if (GameEngine.Instance.isRunning()) {
+        if (theGameEngine.isRunning()) {
             pauseGameAndShowPauseDialog();
             return true;
         }
@@ -86,7 +86,7 @@ public class GameFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void pauseGameAndShowPauseDialog() {
-        GameEngine.Instance.pauseGame();
+        theGameEngine.pauseGame();
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.pause_dialog_title)
                 .setMessage(R.string.pause_dialog_message)
@@ -94,21 +94,21 @@ public class GameFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        GameEngine.Instance.resumeGame();
+                        theGameEngine.resumeGame();
                     }
                 })
                 .setNegativeButton(R.string.stop, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        GameEngine.Instance.stopGame();
+                        theGameEngine.stopGame();
                         ((ScaffoldActivity)getActivity()).navigateBack();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        GameEngine.Instance.resumeGame();
+                        theGameEngine.resumeGame();
                     }
                 })
                 .create()
@@ -118,12 +118,12 @@ public class GameFragment extends BaseFragment implements View.OnClickListener {
 
     private void playOrPause() {
         Button button = (Button) getView().findViewById(R.id.btn_play_pause);
-        if (GameEngine.Instance.isPaused()) {
-            GameEngine.Instance.resumeGame();
+        if (theGameEngine.isPaused()) {
+            theGameEngine.resumeGame();
             button.setText(R.string.pause);
         }
         else {
-            GameEngine.Instance.pauseGame();
+            theGameEngine.pauseGame();
             button.setText(R.string.resume);
         }
     }

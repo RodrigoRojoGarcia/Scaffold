@@ -5,61 +5,32 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import dadm.scaffold.input.InputController;
-import dadm.scaffold.space.Bullet;
-import dadm.scaffold.space.Projectile;
-import dadm.scaffold.space.SpaceShipPlayer;
-import dadm.scaffold.space.Spaceship;
 
 public class GameEngine {
 
-    public static GameEngine Instance = new GameEngine();
 
-
-    private List<Projectile> projectilesToAdd = new ArrayList<>();
-    private List<Spaceship> spaceshipsToAdd = new ArrayList<>();
-
-    private Map<Integer, Projectile> projectilesToRemove = new ConcurrentHashMap<>();
-    private Map<Integer, Spaceship> spaceshipsToRemove = new ConcurrentHashMap<>();
-
-    private Map<Integer, Projectile> projectiles = new ConcurrentHashMap<>();
-    private Map<Integer, Spaceship> spaceships = new ConcurrentHashMap<>();
-    private SpaceShipPlayer player;
-
+    private List<GameObject> gameObjects = new ArrayList<GameObject>();
+    private List<GameObject> objectsToAdd = new ArrayList<GameObject>();
+    private List<GameObject> objectsToRemove = new ArrayList<GameObject>();
 
     private UpdateThread theUpdateThread;
     private DrawThread theDrawThread;
     public InputController theInputController;
-    private GameView theGameView;
+    private final GameView theGameView;
 
     public int width;
     public int height;
     public double pixelFactor;
 
-
-
-    //#region GAMEOBJECTS QUANTITIES
-    private AtomicInteger numProjectiles = new AtomicInteger();
-    private AtomicInteger numSpaceships = new AtomicInteger();
-    //#endregion
-
     private Activity mainActivity;
 
-
-    private GameEngine(){}
-
-    public void setActivity(Activity activity){
+    public GameEngine(Activity activity, GameView gameView) {
         mainActivity = activity;
-    }
-    public void setGameView(GameView gameView){
+
         theGameView = gameView;
-        theGameView.setProjectiles(this.projectiles);
-        theGameView.setSpaceships(this.spaceships);
+        theGameView.setGameObjects(this.gameObjects);
         this.width = theGameView.getWidth()
                 - theGameView.getPaddingRight() - theGameView.getPaddingLeft();
         this.height = theGameView.getHeight()
@@ -67,9 +38,8 @@ public class GameEngine {
 
         this.pixelFactor = this.height / 400d;
 
-        this.player = new SpaceShipPlayer(this);
-    }
 
+    }
 
     public void setTheInputController(InputController inputController) {
         theInputController = inputController;
@@ -79,14 +49,11 @@ public class GameEngine {
         // Stop a game if it is running
         stopGame();
 
-        for(Projectile proj : projectiles.values()){
-            proj.startGame();
+        // Setup the game objects
+        int numGameObjects = gameObjects.size();
+        for (int i = 0; i < numGameObjects; i++) {
+            gameObjects.get(i).startGame();
         }
-        for(Spaceship sp : spaceships.values()){
-            sp.startGame();
-        }
-
-        player.startGame();
 
         // Start the update thread
         theUpdateThread = new UpdateThread(this);
@@ -124,68 +91,33 @@ public class GameEngine {
         }
     }
 
-    //public void addGameObject(GameObject gameObject) {
-    //    if (isRunning()) {
-    //        objectsToAdd.add(gameObject);
-    //    } else {
-    //        gameObjects.add(gameObject);
-    //    }
-    //    mainActivity.runOnUiThread(gameObject.onAddedRunnable);
-    //}
-
-    public void addProjectile(Projectile proj){
-        proj.setId(numProjectiles.get());
-        if(isRunning()){
-            projectiles.put(numProjectiles.incrementAndGet(), proj);
-        }else{
-            projectiles.put(numProjectiles.incrementAndGet(), proj);
+    public void addGameObject(GameObject gameObject) {
+        if (isRunning()) {
+            objectsToAdd.add(gameObject);
+        } else {
+            gameObjects.add(gameObject);
         }
-        mainActivity.runOnUiThread((proj.onAddedRunnable));
+        mainActivity.runOnUiThread(gameObject.onAddedRunnable);
     }
 
-    //public void removeGameObject(GameObject gameObject) {
-    //    objectsToRemove.add(gameObject);
-    //    mainActivity.runOnUiThread(gameObject.onRemovedRunnable);
-    //}
+    public void removeGameObject(GameObject gameObject) {
+        objectsToRemove.add(gameObject);
+        mainActivity.runOnUiThread(gameObject.onRemovedRunnable);
+    }
 
     public void onUpdate(long elapsedMillis) {
-        for(final Projectile proj : projectiles.values()){
-            //executor.submit(new Runnable(){
-            //    @Override
-            //    public void run(){
-            //        proj.onUpdate(elapsedMillis);
-            //    }
-            //});
+        int numGameObjects = gameObjects.size();
+        for (int i = 0; i < numGameObjects; i++) {
+            gameObjects.get(i).onUpdate(elapsedMillis, this);
         }
-        for(final Spaceship spaceship : spaceships.values()){
-            //executor.submit(new Runnable(){
-            //    @Override
-            //    public void run(){
-            //        spaceship.onUpdate(elapsedMillis);
-            //    }
-            //});
+        synchronized (gameObjects) {
+            while (!objectsToRemove.isEmpty()) {
+                gameObjects.remove(objectsToRemove.remove(0));
+            }
+            while (!objectsToAdd.isEmpty()) {
+                gameObjects.add(objectsToAdd.remove(0));
+            }
         }
-        player.onUpdate(elapsedMillis);
-
-
-
-
-
-        final AtomicBoolean removeProjectiles = new AtomicBoolean();
-        final AtomicBoolean removeSpaceships = new AtomicBoolean();
-
-        //executor.submit(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        removeProjectiles(projectilesToRemove, removeProjectiles);
-        //    }
-        //});
-        //executor.submit(new Runnable(){
-        //    @Override
-        //    public void run(){
-        //        removeSpaceships(spaceshipsToRemove, removeSpaceships);
-        //    }
-        //});
     }
 
     public void onDraw() {
@@ -203,49 +135,4 @@ public class GameEngine {
     public Context getContext() {
         return theGameView.getContext();
     }
-
-    public void removeProjectiles(Map<Integer,Projectile> projectiles2remove, AtomicBoolean removeProjectiles){
-        //try{
-        //projectilesInfoProcessed.await();
-        if(removeProjectiles.get()){
-            for(Integer i : projectiles2remove.keySet()){
-                projectiles.remove(i);
-                mainActivity.runOnUiThread(projectiles2remove.get(i).onRemovedRunnable);
-                numProjectiles.decrementAndGet();
-            }
-        }
-
-
-        //}catch (InterruptedException e){
-        //    e.printStackTrace();
-        //}
-    }
-    public void removeSpaceships(Map<Integer,Spaceship> spaceships2remove, AtomicBoolean removeSpaceships){
-        //try{
-        //projectilesInfoProcessed.await();
-        if(removeSpaceships.get()){
-            for(Integer i : spaceships2remove.keySet()){
-                projectiles.remove(i);
-                mainActivity.runOnUiThread(spaceships2remove.get(i).onRemovedRunnable);
-                numProjectiles.decrementAndGet();
-            }
-        }
-
-
-        //}catch (InterruptedException e){
-        //    e.printStackTrace();
-        //}
-    }
-
-    public void evaluateProjectile(Projectile projectile, Map<Integer, Projectile> projectiles2remove){
-        if (projectile.positionY < -projectile.imageHeight) {
-            projectiles2remove.put(projectile.getId(), projectile);
-            // And return it to the pool
-            if(projectile instanceof Bullet){
-                ((Bullet) projectile).getParent().releaseBullet((Bullet) projectile);
-            }
-
-        }
-    }
-
 }
