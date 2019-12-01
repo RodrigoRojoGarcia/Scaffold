@@ -6,7 +6,9 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
+import dadm.scaffold.R;
 import dadm.scaffold.input.InputController;
+import dadm.scaffold.space.SpaceShipEnemy;
 
 public class GameEngine {
 
@@ -48,6 +50,9 @@ public class GameEngine {
     public void startGame() {
         // Stop a game if it is running
         stopGame();
+
+        addGameObject(new SpaceShipEnemy(this, R.drawable.robot));
+
 
         // Setup the game objects
         int numGameObjects = gameObjects.size();
@@ -135,4 +140,6 @@ public class GameEngine {
     public Context getContext() {
         return theGameView.getContext();
     }
+
+    public List<GameObject> getGameObjects(){return gameObjects;}
 }

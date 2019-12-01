@@ -5,19 +5,21 @@ import java.util.List;
 
 import dadm.scaffold.R;
 import dadm.scaffold.engine.GameEngine;
+import dadm.scaffold.engine.GameObject;
 import dadm.scaffold.engine.Sprite;
 import dadm.scaffold.input.InputController;
 
-public class SpaceShipPlayer extends Sprite {
+public class SpaceShipPlayer extends SpaceShip {
 
-    private static final int INITIAL_BULLET_POOL_AMOUNT = 6;
-    private static final long TIME_BETWEEN_BULLETS = 250;
-    List<Bullet> bullets = new ArrayList<Bullet>();
-    private long timeSinceLastFire;
+
+    private final int HEALTH = 3;
+    private final int COLLISION_FACTOR = 15000;
 
     private int maxX;
     private int maxY;
     private double speedFactor;
+
+
 
 
     public SpaceShipPlayer(GameEngine gameEngine){
@@ -29,28 +31,13 @@ public class SpaceShipPlayer extends Sprite {
         initBulletPool(gameEngine);
     }
 
-    private void initBulletPool(GameEngine gameEngine) {
-        for (int i=0; i<INITIAL_BULLET_POOL_AMOUNT; i++) {
-            bullets.add(new Bullet(gameEngine));
-        }
-    }
-
-    private Bullet getBullet() {
-        if (bullets.isEmpty()) {
-            return null;
-        }
-        return bullets.remove(0);
-    }
-
-    void releaseBullet(Bullet bullet) {
-        bullets.add(bullet);
-    }
-
 
     @Override
     public void startGame() {
         positionX = maxX / 2;
         positionY = maxY / 2;
+        setHealth(HEALTH);
+        setCollisionFactor(COLLISION_FACTOR);
     }
 
     @Override
@@ -58,6 +45,9 @@ public class SpaceShipPlayer extends Sprite {
         // Get the info from the inputController
         updatePosition(elapsedMillis, gameEngine.theInputController);
         checkFiring(elapsedMillis, gameEngine);
+
+        checkCollisions(gameEngine);
+
     }
 
     private void updatePosition(long elapsedMillis, InputController inputController) {
@@ -83,13 +73,35 @@ public class SpaceShipPlayer extends Sprite {
             if (bullet == null) {
                 return;
             }
-            bullet.init(this, positionX + imageWidth/2, positionY);
+            bullet.init(this, positionX + imageWidth, positionY+ imageHeight/2, 1);
             gameEngine.addGameObject(bullet);
             timeSinceLastFire = 0;
         }
         else {
             timeSinceLastFire += elapsedMillis;
         }
+    }
+
+    private void checkCollisions(GameEngine gameEngine){
+        for(GameObject go : gameEngine.getGameObjects()){
+            if(go instanceof Bullet){
+                if(intersect((Sprite) go)){
+                    System.out.println("owo");
+                    if(((Bullet) go).getParent() != this){
+                        System.out.println("OwO");
+                        gameEngine.removeGameObject(go);
+                        ((Bullet) go).getParent().releaseBullet((Bullet) go);
+                        addHealth(-1);
+                    }
+                }
+
+            }
+        }
+    }
+
+    @Override
+    public void doTheThing(Sprite sprite){
+
     }
 
 }

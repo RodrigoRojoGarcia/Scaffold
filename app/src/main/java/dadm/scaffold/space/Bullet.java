@@ -8,21 +8,27 @@ public class Bullet extends Sprite {
 
     private double speedFactor;
 
-    private SpaceShipPlayer parent;
+    private int direction;
+
+    private final int COLLSION_FACTOR = 2000;
+
+    private SpaceShip parent;
 
     public Bullet(GameEngine gameEngine){
         super(gameEngine, R.drawable.bullet);
 
-        speedFactor = gameEngine.pixelFactor * -300d / 1000d;
+        speedFactor = gameEngine.pixelFactor * 300d / 1000d;
     }
 
     @Override
-    public void startGame() {}
+    public void startGame() {
+        setCollisionFactor(COLLSION_FACTOR);
+    }
 
     @Override
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
-        positionY += speedFactor * elapsedMillis;
-        if (positionY < -imageHeight) {
+        positionX += speedFactor * elapsedMillis * this.direction;
+        if (positionX < -imageWidth || positionX > gameEngine.width - imageWidth) {
             gameEngine.removeGameObject(this);
             // And return it to the pool
             parent.releaseBullet(this);
@@ -30,9 +36,18 @@ public class Bullet extends Sprite {
     }
 
 
-    public void init(SpaceShipPlayer parentPlayer, double initPositionX, double initPositionY) {
+    public void init(SpaceShip parentSpaceShip, double initPositionX, double initPositionY, int direction) {
         positionX = initPositionX - imageWidth/2;
         positionY = initPositionY - imageHeight/2;
-        parent = parentPlayer;
+        parent = parentSpaceShip;
+        this.direction = direction;
     }
+
+    @Override
+    public void doTheThing(Sprite sprite){
+
+    }
+
+    public SpaceShip getParent(){return parent;}
+
 }
