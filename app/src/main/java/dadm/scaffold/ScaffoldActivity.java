@@ -7,6 +7,7 @@ import android.view.View;
 
 import dadm.scaffold.counter.GameFragment;
 import dadm.scaffold.counter.MainMenuFragment;
+import dadm.scaffold.counter.SelectFragment;
 
 public class ScaffoldActivity extends AppCompatActivity {
 
@@ -26,6 +27,10 @@ public class ScaffoldActivity extends AppCompatActivity {
     public void startGame() {
         // Navigate the the game fragment, which makes the start automatically
         navigateToFragment( new GameFragment());
+    }
+
+    public void startSelectShip(){
+        navigateToFragment(new SelectFragment());
     }
 
     private void navigateToFragment(BaseFragment dst) {

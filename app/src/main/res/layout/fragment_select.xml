@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/purple"
+    tools:context=".counter.SelectFragment">
+
+    <TextView
+        android:layout_gravity="center_horizontal|top"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/select_title"
+        android:textSize="128dp"
+        android:textAlignment="gravity"
+        android:fontFamily="@font/game_over"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+    <Button
+        android:id="@+id/btn_exit"
+        android:layout_width="169dp"
+        android:layout_height="78dp"
+
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center|bottom"
+        android:background="@drawable/black"
+        android:fontFamily="@font/game_over"
+        android:gravity="center"
+        android:text="@string/stop"
+        android:textColor="@color/colorPrimary"
+        android:textSize="128dp" />
+
+
+
+    <Button
+        android:id="@+id/btn_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center"
+        android:background="@drawable/black"
+        android:fontFamily="@font/game_over"
+        android:gravity="center"
+        android:text="❮"
+        android:textColor="@color/colorPrimary"
+        android:textSize="64dp" />
+
+
+    <Button
+        android:id="@+id/btn_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="right|center"
+        android:background="@drawable/black"
+
+        android:fontFamily="@font/game_over"
+        android:gravity="center"
+        android:text="❯"
+        android:textColor="@color/colorPrimary"
+        android:textSize="64dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="145dp"
+        android:layout_height="145dp"
+        android:layout_gravity="center"
+        android:src="@drawable/spaceship" />
+
+
+</FrameLayout>

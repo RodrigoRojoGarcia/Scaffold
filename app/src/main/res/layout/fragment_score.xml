@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/purple"
+    tools:context=".counter.ScoreFragment">
+
+    <TextView
+        android:layout_gravity="center_horizontal|top"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/score_title"
+        android:textSize="192dp"
+        android:textAlignment="gravity"
+        android:fontFamily="@font/game_over"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_gravity="center"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/score"
+        android:textSize="128dp"
+        android:textAlignment="gravity"
+        android:fontFamily="@font/game_over"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_exit"
+        android:layout_width="169dp"
+        android:layout_height="78dp"
+
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center|bottom"
+        android:background="@drawable/black"
+        android:fontFamily="@font/game_over"
+        android:gravity="center"
+        android:text="@string/stop"
+        android:textColor="@color/colorPrimary"
+        android:textSize="128dp" />
+
+
+</FrameLayout>
