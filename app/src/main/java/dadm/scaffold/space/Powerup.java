@@ -76,7 +76,7 @@ public abstract class Powerup extends Sprite {
                         gameEngine.removeGameObject(this);
                         gameEngine.removeGameObject(go);
                         ((Bullet) go).getParent().releaseBullet((Bullet)go);
-                        ((SpaceShipPlayer) ((Bullet) go).getParent()).addPoints(POINTS);
+                        gameEngine.addPoints(POINTS);
                         effect(go);
                     }
                 }
