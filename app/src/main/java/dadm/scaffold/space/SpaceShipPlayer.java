@@ -1,5 +1,7 @@
 package dadm.scaffold.space;
 
+import android.widget.ImageView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +23,6 @@ public class SpaceShipPlayer extends SpaceShip {
     private double speedFactor;
 
     private boolean tripleShot = false;
-
-    private int points = 0;
-
-
-
 
     public SpaceShipPlayer(GameEngine gameEngine){
         super(gameEngine, R.drawable.ship);
@@ -97,9 +94,7 @@ public class SpaceShipPlayer extends SpaceShip {
         for(GameObject go : gameEngine.getGameObjects()){
             if(go instanceof Bullet){
                 if(intersect((Sprite) go)){
-                    System.out.println("owo");
                     if(((Bullet) go).getParent() != this){
-                        System.out.println("OwO");
                         gameEngine.removeGameObject(go);
                         ((Bullet) go).getParent().releaseBullet((Bullet) go);
                         addHealth(-1);
@@ -115,13 +110,15 @@ public class SpaceShipPlayer extends SpaceShip {
 
     }
 
+
+
+
     public void setTripleShot(boolean tripleShot){this.tripleShot = tripleShot;}
 
     private void resetPowerUps(){
         this.tripleShot = false;
     }
 
-    public void addPoints(int points){this.points += points;}
 
 
 }

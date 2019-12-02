@@ -1,6 +1,10 @@
 package dadm.scaffold.engine;
 
 
+import android.widget.TextView;
+
+import dadm.scaffold.R;
+
 public class DrawThread extends Thread {
 
     private final GameEngine gameEngine;
@@ -78,5 +82,7 @@ public class DrawThread extends Thread {
     public boolean isGamePaused() {
         return isGamePaused;
     }
+
+
 }
 

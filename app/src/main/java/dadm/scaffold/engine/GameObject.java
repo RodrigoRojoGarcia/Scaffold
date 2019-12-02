@@ -27,7 +27,11 @@ public abstract class GameObject {
         }
     };
 
+
+
+
     public void onRemovedFromGameUiThread(){
+
     }
 
 }
