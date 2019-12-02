@@ -44,4 +44,6 @@ public abstract class SpaceShip extends Sprite {
     }
     public int getHealth(){return this.health;}
 
+
+
 }

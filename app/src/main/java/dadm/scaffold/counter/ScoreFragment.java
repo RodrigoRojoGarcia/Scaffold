@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import dadm.scaffold.BaseFragment;
 import dadm.scaffold.R;
+import dadm.scaffold.ScaffoldActivity;
 
 
-public class ScoreFragment extends Fragment {
+public class ScoreFragment extends BaseFragment {
 
     public ScoreFragment() {
         // Required empty public constructor
@@ -32,6 +34,21 @@ public class ScoreFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_score, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.btn_exit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ScaffoldActivity)getActivity()).returnToMainMenu();
+            }
+        });
+    }
+
+    public void onClick(View view){
+
     }
 
 

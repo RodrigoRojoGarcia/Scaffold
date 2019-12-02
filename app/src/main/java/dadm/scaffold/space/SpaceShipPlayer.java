@@ -1,5 +1,7 @@
 package dadm.scaffold.space;
 
+import android.widget.ImageView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +25,6 @@ public class SpaceShipPlayer extends SpaceShip {
     private double speedFactor;
 
     private boolean tripleShot = false;
-
-    private int points = 0;
-
-
-
 
     public SpaceShipPlayer(GameEngine gameEngine){
         super(gameEngine, R.drawable.ship);
@@ -150,11 +147,11 @@ public class SpaceShipPlayer extends SpaceShip {
 
     }
 
+
     private void resetPowerUps(){
         this.tripleShot = false;
     }
 
-    public void addPoints(int points){this.points += points;}
 
 
 }

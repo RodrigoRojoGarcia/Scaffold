@@ -4,9 +4,12 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import dadm.scaffold.counter.GameFragment;
+import dadm.scaffold.counter.GameOverFragment;
 import dadm.scaffold.counter.MainMenuFragment;
+import dadm.scaffold.counter.ScoreFragment;
 import dadm.scaffold.counter.SelectFragment;
 
 public class ScaffoldActivity extends AppCompatActivity {
@@ -31,6 +34,18 @@ public class ScaffoldActivity extends AppCompatActivity {
 
     public void startSelectShip(){
         navigateToFragment(new SelectFragment());
+    }
+
+    public void startGameOver(){
+        navigateToFragment(new GameOverFragment());
+    }
+
+    public void startScore(){
+        navigateToFragment(new ScoreFragment());
+    }
+
+    public void returnToMainMenu(){
+        navigateToFragment(new MainMenuFragment());
     }
 
     private void navigateToFragment(BaseFragment dst) {
@@ -75,4 +90,6 @@ public class ScaffoldActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

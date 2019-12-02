@@ -13,6 +13,7 @@
     <string name="game_over">GAME OVER</string>
     <string name="score_title">SCORE</string>
     <string name="score">Your score was: </string>
+    <string name="score_game">SCORE: 0</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

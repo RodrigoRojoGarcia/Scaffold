@@ -1,5 +1,7 @@
 package dadm.scaffold.space;
 
+import java.util.Random;
+
 import dadm.scaffold.engine.GameEngine;
 import dadm.scaffold.engine.GameObject;
 import dadm.scaffold.engine.Sprite;
@@ -10,13 +12,15 @@ public class SpaceShipEnemy extends SpaceShip {
     private final int HEALTH = 2;
 
     private final int COLLISION_FACTOR = 14000;
-    private final int POINTS = 10;
-    protected static final long TIME_BETWEEN_BULLETS = 750;
+    private final Integer POINTS = 10;
+    protected static final long TIME_BETWEEN_BULLETS = 1500;
 
     private int maxX;
     private int maxY;
     private double speedFactor= pixelFactor * 00d / 1000d;
 
+    private Random rand;
+    private int randomPos;
 
     public SpaceShipEnemy(GameEngine gameEngine, int sprite){
         super(gameEngine, sprite);
@@ -25,6 +29,8 @@ public class SpaceShipEnemy extends SpaceShip {
         maxY = gameEngine.height - imageHeight;
         initBulletPool(gameEngine);
 
+        rand = new Random();
+        randomPos = rand.nextInt((10 - 1) + 1) + 1;
     }
 
     @Override
@@ -32,7 +38,7 @@ public class SpaceShipEnemy extends SpaceShip {
         setHealth(HEALTH);
         setCollisionFactor(COLLISION_FACTOR);
         positionX = maxX;
-        positionY = maxY/2;
+        positionY = maxY/randomPos;
     }
 
     @Override
@@ -42,6 +48,9 @@ public class SpaceShipEnemy extends SpaceShip {
         checkCollision(gameEngine);
         if(this.health <= 0){
             gameEngine.removeGameObject(this);
+            gameEngine.numEnemies--;
+            gameEngine.addPoints(POINTS);
+
         }
     }
 
@@ -88,7 +97,6 @@ public class SpaceShipEnemy extends SpaceShip {
                         gameEngine.removeGameObject(go);
                         ((Bullet) go).getParent().releaseBullet((Bullet)go);
                         addHealth(-1);
-                        ((SpaceShipPlayer) ((Bullet) go).getParent()).addPoints(POINTS);
                     }
                 }
             }
