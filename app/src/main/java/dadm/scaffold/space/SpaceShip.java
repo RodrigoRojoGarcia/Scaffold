@@ -12,7 +12,7 @@ public abstract class SpaceShip extends Sprite {
     protected int health;
 
     protected static final int INITIAL_BULLET_POOL_AMOUNT = 12;
-    protected static final long TIME_BETWEEN_BULLETS = 250;
+
     List<Bullet> bullets = new ArrayList<Bullet>();
     protected long timeSinceLastFire;
 

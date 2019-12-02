@@ -9,6 +9,7 @@ import java.util.List;
 import dadm.scaffold.R;
 import dadm.scaffold.input.InputController;
 import dadm.scaffold.space.SpaceShipEnemy;
+import dadm.scaffold.space.SpaceShipPlayer;
 
 public class GameEngine {
 
@@ -111,9 +112,15 @@ public class GameEngine {
     }
 
     public void onUpdate(long elapsedMillis) {
-        int numGameObjects = gameObjects.size();
-        for (int i = 0; i < numGameObjects; i++) {
-            gameObjects.get(i).onUpdate(elapsedMillis, this);
+
+        for (GameObject go : gameObjects) {
+
+            go.onUpdate(elapsedMillis, this);
+            if(go instanceof SpaceShipPlayer){
+                if(((SpaceShipPlayer) go).getHealth() <= 0){
+                    stopGame();
+                }
+            }
         }
         synchronized (gameObjects) {
             while (!objectsToRemove.isEmpty()) {

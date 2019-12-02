@@ -13,11 +13,14 @@ public class SpaceShipPlayer extends SpaceShip {
 
 
     private final int HEALTH = 3;
-    private final int COLLISION_FACTOR = 15000;
+    private final int COLLISION_FACTOR = 14000;
+    protected static final long TIME_BETWEEN_BULLETS = 250;
 
     private int maxX;
     private int maxY;
     private double speedFactor;
+
+    private boolean tripleShot = false;
 
 
 
@@ -102,6 +105,12 @@ public class SpaceShipPlayer extends SpaceShip {
     @Override
     public void doTheThing(Sprite sprite){
 
+    }
+
+    public void setTripleShot(boolean tripleShot){this.tripleShot = tripleShot;}
+
+    private void resetPowerUps(){
+        this.tripleShot = false;
     }
 
 }

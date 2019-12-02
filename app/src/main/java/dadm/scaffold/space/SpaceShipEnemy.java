@@ -1,6 +1,7 @@
 package dadm.scaffold.space;
 
 import dadm.scaffold.engine.GameEngine;
+import dadm.scaffold.engine.GameObject;
 import dadm.scaffold.engine.Sprite;
 
 public class SpaceShipEnemy extends SpaceShip {
@@ -8,7 +9,8 @@ public class SpaceShipEnemy extends SpaceShip {
 
     private final int HEALTH = 2;
 
-    private final int COLLISION_FACTOR = 5;
+    private final int COLLISION_FACTOR = 14000;
+    protected static final long TIME_BETWEEN_BULLETS = 750;
 
     private int maxX;
     private int maxY;
@@ -36,6 +38,10 @@ public class SpaceShipEnemy extends SpaceShip {
     public void onUpdate(long elapsedMillis, GameEngine gameEngine){
         updatePosition(elapsedMillis, gameEngine);
         checkFiring(elapsedMillis, gameEngine);
+        checkCollision(gameEngine);
+        if(this.health <= 0){
+            gameEngine.removeGameObject(this);
+        }
     }
 
     private void checkFiring(long elapsedMillis, GameEngine gameEngine){
@@ -71,6 +77,20 @@ public class SpaceShipEnemy extends SpaceShip {
     @Override
     public void doTheThing(Sprite sprite){
 
+    }
+
+    private void checkCollision (GameEngine gameEngine){
+        for(GameObject go : gameEngine.getGameObjects()){
+            if(go instanceof  Bullet){
+                if(intersect((Sprite) go)){
+                    if(((Bullet) go).getParent() != this){
+                        gameEngine.removeGameObject(go);
+                        ((Bullet) go).getParent().releaseBullet((Bullet)go);
+                        addHealth(-1);
+                    }
+                }
+            }
+        }
     }
 
 }
