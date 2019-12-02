@@ -10,6 +10,7 @@ public class SpaceShipEnemy extends SpaceShip {
     private final int HEALTH = 2;
 
     private final int COLLISION_FACTOR = 14000;
+    private final int POINTS = 10;
     protected static final long TIME_BETWEEN_BULLETS = 750;
 
     private int maxX;
@@ -83,10 +84,11 @@ public class SpaceShipEnemy extends SpaceShip {
         for(GameObject go : gameEngine.getGameObjects()){
             if(go instanceof  Bullet){
                 if(intersect((Sprite) go)){
-                    if(((Bullet) go).getParent() != this){
+                    if(((Bullet) go).getParent() instanceof SpaceShipPlayer){
                         gameEngine.removeGameObject(go);
                         ((Bullet) go).getParent().releaseBullet((Bullet)go);
                         addHealth(-1);
+                        ((SpaceShipPlayer) ((Bullet) go).getParent()).addPoints(POINTS);
                     }
                 }
             }

@@ -22,6 +22,8 @@ public class SpaceShipPlayer extends SpaceShip {
 
     private boolean tripleShot = false;
 
+    private int points = 0;
+
 
 
 
@@ -72,13 +74,19 @@ public class SpaceShipPlayer extends SpaceShip {
 
     private void checkFiring(long elapsedMillis, GameEngine gameEngine) {
         if (gameEngine.theInputController.isFiring && timeSinceLastFire > TIME_BETWEEN_BULLETS) {
-            Bullet bullet = getBullet();
-            if (bullet == null) {
-                return;
+
+            if(this.tripleShot){
+                
+            }else{
+                Bullet bullet = getBullet();
+                if (bullet == null) {
+                    return;
+                }
+                bullet.init(this, positionX + imageWidth, positionY+ imageHeight/2, 1);
+                gameEngine.addGameObject(bullet);
+                timeSinceLastFire = 0;
             }
-            bullet.init(this, positionX + imageWidth, positionY+ imageHeight/2, 1);
-            gameEngine.addGameObject(bullet);
-            timeSinceLastFire = 0;
+
         }
         else {
             timeSinceLastFire += elapsedMillis;
@@ -112,5 +120,8 @@ public class SpaceShipPlayer extends SpaceShip {
     private void resetPowerUps(){
         this.tripleShot = false;
     }
+
+    public void addPoints(int points){this.points += points;}
+
 
 }
