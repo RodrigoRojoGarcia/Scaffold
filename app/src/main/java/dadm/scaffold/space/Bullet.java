@@ -8,7 +8,8 @@ public class Bullet extends Sprite {
 
     private double speedFactor;
 
-    private int direction;
+    private int directionX;
+    private int directionY;
 
     private final int COLLSION_FACTOR = 2000;
 
@@ -27,20 +28,26 @@ public class Bullet extends Sprite {
 
     @Override
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
-        positionX += speedFactor * elapsedMillis * this.direction;
+        positionX += speedFactor * elapsedMillis * this.directionX;
+        positionY += speedFactor * elapsedMillis * this.directionY;
         if (positionX < -imageWidth || positionX > gameEngine.width - imageWidth) {
             gameEngine.removeGameObject(this);
             // And return it to the pool
+            parent.releaseBullet(this);
+        }else
+        if(positionY < -imageHeight || positionY > gameEngine.height - imageHeight){
+            gameEngine.removeGameObject(this);
             parent.releaseBullet(this);
         }
     }
 
 
-    public void init(SpaceShip parentSpaceShip, double initPositionX, double initPositionY, int direction) {
+    public void init(SpaceShip parentSpaceShip, double initPositionX, double initPositionY, int directionX, int directionY) {
         positionX = initPositionX - imageWidth/2;
         positionY = initPositionY - imageHeight/2;
         parent = parentSpaceShip;
-        this.direction = direction;
+        this.directionX = directionX;
+        this.directionY = directionY;
     }
 
     @Override
