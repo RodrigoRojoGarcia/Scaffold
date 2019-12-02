@@ -68,4 +68,6 @@ public abstract class Sprite extends GameObject {
     }
 
     public abstract void doTheThing(Sprite sprite);
+
+    public void setRotation(double rotation) {this.rotation = rotation;}
 }

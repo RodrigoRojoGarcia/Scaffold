@@ -60,7 +60,7 @@ public class SpaceShipEnemy extends SpaceShip {
             if(bullet == null){
                 return;
             }
-            bullet.init(this, positionX, positionY + imageHeight/2, -1);
+            bullet.init(this, positionX, positionY + imageHeight/2, -1, 0);
             gameEngine.addGameObject(bullet);
             timeSinceLastFire = 0;
         }else{

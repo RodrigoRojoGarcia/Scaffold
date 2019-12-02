@@ -12,9 +12,13 @@ import dadm.scaffold.R;
 import dadm.scaffold.ScaffoldActivity;
 import dadm.scaffold.counter.GameFragment;
 import dadm.scaffold.input.InputController;
+
+import dadm.scaffold.space.Meteor;
 import dadm.scaffold.space.SpaceShip;
+
 import dadm.scaffold.space.SpaceShipEnemy;
 import dadm.scaffold.space.SpaceShipPlayer;
+import dadm.scaffold.space.TripleShotPowerUp;
 
 public class GameEngine {
 
@@ -69,6 +73,16 @@ public class GameEngine {
             addGameObject(new SpaceShipEnemy(this, R.drawable.robot));
         }
 
+
+        TripleShotPowerUp pu = new TripleShotPowerUp(this);
+        pu.init(this.width, this.height/2, -1, 1);
+
+        Meteor meteor = new Meteor(this);
+        meteor.init(this.width, this.height/2, -1, -1);
+
+
+        addGameObject(pu);
+        addGameObject(meteor);
 
 
         // Setup the game objects
