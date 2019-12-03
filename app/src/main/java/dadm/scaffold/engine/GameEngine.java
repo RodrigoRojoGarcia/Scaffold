@@ -58,6 +58,7 @@ public class GameEngine {
 
         numEnemies = nEnemies;
 
+        ((ScaffoldActivity)mainActivity).points = 0;
 
     }
 
@@ -148,32 +149,33 @@ public class GameEngine {
                 ImageView iv1 = mainActivity.findViewById(R.id.life1);
                 ImageView iv2 = mainActivity.findViewById(R.id.life2);
                 ImageView iv3 = mainActivity.findViewById(R.id.life3);
+                if(iv1 != null && iv2 != null && iv3 != null) {
+                    switch (((SpaceShipPlayer) go).getHealth()) {
+                        case 3:
+                            iv1.setAlpha(1.0f);
+                            iv2.setAlpha(1.0f);
+                            iv3.setAlpha(1.0f);
 
-                switch(((SpaceShipPlayer)go).getHealth()){
-                    case 3:
-                        iv1.setAlpha(1.0f);
-                        iv2.setAlpha(1.0f);
-                        iv3.setAlpha(1.0f);
+                            break;
+                        case 2:
+                            iv1.setAlpha(1.0f);
+                            iv2.setAlpha(1.0f);
+                            iv3.setAlpha(0.0f);
 
-                        break;
-                    case 2:
-                        iv1.setAlpha(1.0f);
-                        iv2.setAlpha(1.0f);
-                        iv3.setAlpha(0.0f);
+                            break;
+                        case 1:
+                            iv1.setAlpha(1.0f);
+                            iv2.setAlpha(0.0f);
+                            iv3.setAlpha(0.0f);
 
-                        break;
-                    case 1:
-                        iv1.setAlpha(1.0f);
-                        iv2.setAlpha(0.0f);
-                        iv3.setAlpha(0.0f);
+                            break;
+                        case 0:
+                            iv1.setAlpha(0.0f);
+                            iv2.setAlpha(0.0f);
+                            iv3.setAlpha(0.0f);
 
-                        break;
-                    case 0:
-                        iv1.setAlpha(0.0f);
-                        iv2.setAlpha(0.0f);
-                        iv3.setAlpha(0.0f);
-
-                        break;
+                            break;
+                    }
                 }
             }
         });
@@ -191,7 +193,8 @@ public class GameEngine {
             @Override
             public void run() {
                 TextView texto = (TextView)mainActivity.findViewById(R.id.scoreText);
-                texto.setText("SCORE: "+points);
+                if(texto != null)
+                    texto.setText("SCORE: "+((ScaffoldActivity)mainActivity).points);
             }
         });
 
@@ -237,6 +240,6 @@ public class GameEngine {
 
     public List<GameObject> getGameObjects(){return gameObjects;}
 
-    public void addPoints(int points){this.points += points;}
+    public void addPoints(int points){((ScaffoldActivity)mainActivity).points += points;}
 
 }

@@ -20,11 +20,24 @@
         android:textColor="@color/colorPrimary"
         android:textSize="128dp" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="97dp"
-        android:layout_height="107dp"
+    <TextView
+        android:id="@+id/gameOverScreenScoreText"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:fontFamily="@font/game_over"
+        android:text="@string/score"
+        android:textAlignment="gravity"
+        android:textSize="128dp" />
+
+    <ImageView
+        android:id="@+id/spaceshipImage"
+        android:layout_width="98dp"
+        android:layout_height="107dp"
+        android:layout_gravity="center|left"
+        android:layout_marginLeft="16dp"
         android:src="@drawable/spaceship" />
 
     <TextView

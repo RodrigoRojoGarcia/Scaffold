@@ -16,6 +16,11 @@ public class ScaffoldActivity extends AppCompatActivity {
 
     private static final String TAG_FRAGMENT = "content";
 
+    public int points = 0;
+
+    public int spaceshipselected = R.drawable.playershipblue;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,4 +97,6 @@ public class ScaffoldActivity extends AppCompatActivity {
     }
 
 
+
 }
+

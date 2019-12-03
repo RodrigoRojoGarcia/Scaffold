@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import dadm.scaffold.BaseFragment;
 import dadm.scaffold.R;
@@ -45,6 +46,9 @@ public class ScoreFragment extends BaseFragment {
                 ((ScaffoldActivity)getActivity()).returnToMainMenu();
             }
         });
+
+        ((TextView)view.findViewById(R.id.scoreScreenScoreText)).setText("Your score was: "+((ScaffoldActivity)getActivity()).points);
+
     }
 
     public void onClick(View view){

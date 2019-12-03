@@ -17,5 +17,10 @@ public class TripleShotPowerUp extends Powerup {
 
         if(collider instanceof SpaceShipPlayer)
             ((SpaceShipPlayer) collider).setTripleShot(true);
+        if(collider instanceof Bullet){
+            if(((Bullet) collider).getParent() instanceof SpaceShipPlayer){
+                ((SpaceShipPlayer) ((Bullet) collider).getParent()).setTripleShot(true);
+            }
+        }
     }
 }

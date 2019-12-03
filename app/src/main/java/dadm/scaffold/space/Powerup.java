@@ -12,7 +12,6 @@ public abstract class Powerup extends Sprite {
     private double directionY;
     private final int COLLISION_FACTOR = 2000;
 
-    private int POINTS = 0;
 
     public Powerup(GameEngine gameEngine, int sprite){
         super(gameEngine, sprite);
@@ -71,12 +70,9 @@ public abstract class Powerup extends Sprite {
 
                     System.out.println("ME HAN DISPARAO");
                     if(((Bullet)go).getParent() instanceof  SpaceShipPlayer){
-
-
                         gameEngine.removeGameObject(this);
                         gameEngine.removeGameObject(go);
                         ((Bullet) go).getParent().releaseBullet((Bullet)go);
-                        gameEngine.addPoints(POINTS);
                         effect(go);
                     }
                 }
