@@ -1,8 +1,10 @@
 package dadm.scaffold.counter;
 
-import android.content.DialogInterface;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Matrix;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +49,7 @@ public class GameFragment extends BaseFragment implements View.OnClickListener {
                 //se elimina el listener en cuanto es llamado
                 observer.removeOnGlobalLayoutListener(this);
                 GameView gameView = (GameView) getView().findViewById(R.id.gameView);
-                theGameEngine = new GameEngine(getActivity(), gameView, 2, that);
+                theGameEngine = new GameEngine(getActivity(), gameView, 20, that);
                 theGameEngine.setTheInputController(new JoystickInputController(getView()));
                 theGameEngine.addGameObject(new SpaceShipPlayer(theGameEngine, ((ScaffoldActivity)getActivity()).spaceshipselected));
                 theGameEngine.addGameObject(new FramesPerSecondCounter(theGameEngine));
@@ -88,32 +90,44 @@ public class GameFragment extends BaseFragment implements View.OnClickListener {
 
     private void pauseGameAndShowPauseDialog() {
         theGameEngine.pauseGame();
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.pause_dialog_title)
-                .setMessage(R.string.pause_dialog_message)
-                .setPositiveButton(R.string.resume, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        theGameEngine.resumeGame();
-                    }
-                })
-                .setNegativeButton(R.string.stop, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        theGameEngine.stopGame();
-                        ((ScaffoldActivity)getActivity()).navigateBack();
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        theGameEngine.resumeGame();
-                    }
-                })
-                .create()
-                .show();
+
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AlertDialogCustom));
+
+
+        builder.setTitle(R.string.pause_dialog_title);
+        builder.setMessage(R.string.pause_dialog_message);
+
+
+
+        builder.setPositiveButton(R.string.resume, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                theGameEngine.resumeGame();
+            }
+        });
+
+        builder.setNegativeButton(R.string.stop, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                theGameEngine.stopGame();
+                ((ScaffoldActivity)getActivity()).navigateBack();
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                theGameEngine.resumeGame();
+            }
+        });
+
+
+
+        builder.show();
+
 
     }
 

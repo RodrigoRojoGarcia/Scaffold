@@ -18,7 +18,7 @@ public class SpaceShipPlayer extends SpaceShip {
     private final int COLLISION_FACTOR = 14000;
 
 
-    protected static long TIME_BETWEEN_BULLETS = 250;
+    protected static long TIME_BETWEEN_BULLETS = 350;
 
     private int maxX;
     private int maxY;
@@ -26,9 +26,13 @@ public class SpaceShipPlayer extends SpaceShip {
 
     private boolean tripleShot = false;
 
+    private long timeSincePowerUp = 0;
+
+    private long timeToPowerUpToGoOff = 8000;
+
     public SpaceShipPlayer(GameEngine gameEngine, int sprite){
         super(gameEngine, sprite);
-        speedFactor = pixelFactor * 100d / 1000d; // We want to move at 100px per second on a 400px tall screen
+        speedFactor = pixelFactor * 250d / 1000d; // We want to move at 100px per second on a 400px tall screen
         maxX = gameEngine.width - imageWidth;
         maxY = gameEngine.height - imageHeight;
 
@@ -53,6 +57,17 @@ public class SpaceShipPlayer extends SpaceShip {
 
         checkCollisions(gameEngine);
 
+        if(this.tripleShot){
+            timeSincePowerUp += elapsedMillis;
+        }
+
+
+        if(timeSincePowerUp >= timeToPowerUpToGoOff){
+            this.tripleShot = false;
+            TIME_BETWEEN_BULLETS = 350;
+            timeSincePowerUp = 0;
+        }
+
     }
 
     private void updatePosition(long elapsedMillis, InputController inputController) {
@@ -76,6 +91,7 @@ public class SpaceShipPlayer extends SpaceShip {
         if (gameEngine.theInputController.isFiring && timeSinceLastFire > TIME_BETWEEN_BULLETS) {
 
             if(this.tripleShot){
+
                 Bullet bulletUp = getBullet();
                 Bullet bulletMid = getBullet();
                 Bullet bulletDown = getBullet();
@@ -100,6 +116,7 @@ public class SpaceShipPlayer extends SpaceShip {
                     return;
                 }
                 bullet.init(this, positionX + imageWidth, positionY+ imageHeight/2, 1, 0);
+                bullet.setRotation(90);
                 gameEngine.addGameObject(bullet);
                 timeSinceLastFire = 0;
             }
@@ -140,9 +157,9 @@ public class SpaceShipPlayer extends SpaceShip {
         this.tripleShot = tripleShot;
         System.out.println("POWERUP");
         if(this.tripleShot){
-            TIME_BETWEEN_BULLETS = 500;
+            TIME_BETWEEN_BULLETS = 1000;
         }else{
-            TIME_BETWEEN_BULLETS = 250;
+            TIME_BETWEEN_BULLETS = 350;
         }
 
     }

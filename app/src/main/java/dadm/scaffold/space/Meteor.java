@@ -12,7 +12,11 @@ public class Meteor extends Powerup {
     private GameEngine theGameEngine;
 
     public Meteor(GameEngine gameEngine){
-        super(gameEngine, R.drawable.star_bronze);
+        super(gameEngine, R.drawable.meteorgreysmall1);
+
+        if(Math.random() >= 0.5){
+            setDrawable(gameEngine, R.drawable.meteorbrownsmall1);
+        }
         theGameEngine = gameEngine;
         speedFactor = gameEngine.pixelFactor * 50d / 1000d;
     }

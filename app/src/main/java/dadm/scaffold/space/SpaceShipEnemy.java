@@ -17,7 +17,7 @@ public class SpaceShipEnemy extends SpaceShip {
 
     private int maxX;
     private int maxY;
-    private double speedFactor= pixelFactor * 00d / 1000d;
+    private double speedFactor= pixelFactor * 100d / 1000d;
 
     private Random rand;
     private int randomPos;

@@ -17,9 +17,9 @@ public abstract class Sprite extends GameObject {
 
     protected double pixelFactor;
 
-    private final Bitmap bitmap;
-    protected final int imageHeight;
-    protected final int imageWidth;
+    private Bitmap bitmap;
+    protected int imageHeight;
+    protected int imageWidth;
 
     private final Matrix matrix = new Matrix();
 
@@ -70,4 +70,13 @@ public abstract class Sprite extends GameObject {
     public abstract void doTheThing(Sprite sprite);
 
     public void setRotation(double rotation) {this.rotation = rotation;}
+
+    public void setDrawable(GameEngine gameEngine, int sprite){
+        Drawable spriteDrawable = gameEngine.getContext().getResources().getDrawable(sprite);
+
+        this.imageHeight = (int) (spriteDrawable.getIntrinsicHeight() * this.pixelFactor);
+        this.imageWidth = (int) (spriteDrawable.getIntrinsicWidth() * this.pixelFactor);
+
+        this.bitmap = ((BitmapDrawable) spriteDrawable).getBitmap();
+    }
 }

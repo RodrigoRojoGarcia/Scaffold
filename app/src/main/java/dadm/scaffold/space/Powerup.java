@@ -48,11 +48,20 @@ public abstract class Powerup extends Sprite {
 
 
     private void updatePosition(long elapsedMillis, GameEngine gameEngine){
+
         positionX += speedFactor * elapsedMillis * this.directionX;
         positionY += speedFactor * elapsedMillis * this.directionY;
-        if(positionY > gameEngine.height - imageHeight || positionY < -imageHeight/2){
-            this.directionY *= -1;
+
+
+        if(positionY > gameEngine.height - imageHeight){
+            this.directionY = -1;
         }
+        if(positionY < 0){
+            this.directionY = 1;
+        }
+
+
+
         if(positionX < -imageWidth){
             gameEngine.removeGameObject(this);
         }

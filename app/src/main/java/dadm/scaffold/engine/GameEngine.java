@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import dadm.scaffold.R;
 import dadm.scaffold.ScaffoldActivity;
@@ -43,6 +44,20 @@ public class GameEngine {
 
     private Integer points = 0;
 
+    private long timeSinceLastEnemy = 5000;
+
+    private long timeToSpawnNewEnemy = 6000;
+
+    private long timeSinceLastMeteor = 2500;
+
+    private long timeToSpawnNewMeteor = 3500;
+
+    private long timeToSpawnPowerUp = 12000;
+
+    private long timeSinceBeggining = 8000;
+
+
+
     public GameEngine(Activity activity, GameView gameView, int nEnemies, GameFragment gf) {
         mainActivity = activity;
 
@@ -70,20 +85,13 @@ public class GameEngine {
         // Stop a game if it is running
         stopGame();
 
-        for(int i = 0; i < numEnemies; i++){
-            addGameObject(new SpaceShipEnemy(this, R.drawable.robot));
-        }
+        //for(int i = 0; i < numEnemies; i++){
+        //    addGameObject(new SpaceShipEnemy(this, R.drawable.enemyblack1));
+        //}
 
 
-        TripleShotPowerUp pu = new TripleShotPowerUp(this);
-        pu.init(this.width, this.height/2, -1, 1);
-
-        Meteor meteor = new Meteor(this);
-        meteor.init(this.width, this.height/2, -1, -1);
 
 
-        addGameObject(pu);
-        addGameObject(meteor);
 
 
         // Setup the game objects
@@ -183,6 +191,11 @@ public class GameEngine {
 
     public void onUpdate(long elapsedMillis) {
 
+        generateRandomEnemies(elapsedMillis);
+        generateRandomMeteor(elapsedMillis);
+        generatePowerUp(elapsedMillis);
+
+
         if(numEnemies <= 0){
             stopGame();
             ((ScaffoldActivity)mainActivity).startScore();
@@ -241,5 +254,47 @@ public class GameEngine {
     public List<GameObject> getGameObjects(){return gameObjects;}
 
     public void addPoints(int points){((ScaffoldActivity)mainActivity).points += points;}
+
+
+    public void generateRandomEnemies(long elapsedMillis){
+        if(timeSinceLastEnemy >= timeToSpawnNewEnemy){
+            //Spawn Enemy
+            SpaceShipEnemy se = new SpaceShipEnemy(this, R.drawable.enemyblack1);
+            se.startGame();
+            addGameObject(se);
+            timeSinceLastEnemy = 0;
+        }else{
+            timeSinceLastEnemy += elapsedMillis;
+        }
+    }
+
+    public void generateRandomMeteor(long elapsedMillis){
+        if(timeSinceLastMeteor >= timeToSpawnNewMeteor){
+            Meteor meteor = new Meteor(this);
+
+            Random rand = new Random();
+            int randomPos = rand.nextInt((10 - 1) + 1) + 1;
+
+            meteor.init(this.width, this.height/randomPos, -1, -1);
+            addGameObject(meteor);
+            meteor.startGame();
+            timeSinceLastMeteor = 0;
+        }else{
+            timeSinceLastMeteor += elapsedMillis;
+        }
+    }
+
+    public void generatePowerUp(long elapsedMillis){
+        if(timeSinceBeggining >= timeToSpawnPowerUp){
+            TripleShotPowerUp pu = new TripleShotPowerUp(this);
+            pu.init(this.width, this.height/2, -1, 1);
+            pu.startGame();
+            addGameObject(pu);
+            timeSinceBeggining = 0;
+        }else{
+            timeSinceBeggining += elapsedMillis;
+        }
+    }
+
 
 }
